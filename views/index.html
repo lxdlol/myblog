@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{{template "common/head.html" .}}
+<body class="lay-blog">
+		<div class="header">
+			<div class="header-wrap">
+				<h1 class="logo pull-left">
+					<a href="index.html">
+						<img src="static/images/logo.png" alt="" class="logo-img">
+						<img src="static/images/logo-text.png" alt="" class="logo-text">
+					</a>
+				</h1>
+				<form class="layui-form blog-seach pull-left" action="/">
+					<div class="layui-form-item blog-sewrap">
+					    <div class="layui-input-block blog-sebox">
+					      <i class="layui-icon layui-icon-search"></i>
+					      <input type="text" name="title" lay-verify="title" autocomplete="off"  class="layui-input" value="{{.title}}">
+					    </div>
+					</div>
+				</form>
+				{{template "common/url.html" .}}
+                <div class="mobile-nav pull-right" id="mobile-nav">
+                    <a href="javascript:;">
+                        <i class="layui-icon layui-icon-more"></i>
+                    </a>
+                </div>
+			</div>
+		{{template "common/phonelink.html"}}
+		</div>
+		<div class="container-wrap">
+			<div class="container">
+					<div class="contar-wrap">
+						<h4 class="item-title">
+							<p><i class="layui-icon layui-icon-speaker"></i>公告：<span>欢迎来到我的轻博客</span></p>
+						</h4>
+						{{range .note}}
+						<div class="item">
+							<div class="item-box  layer-photos-demo1 layer-photos-demo">
+								<h3><a href="/details/{{.Key}}">{{.Title}}</a></h3>
+								<h5>发布于：<span>{{date .UpdatedAt "Y-m-d H:i:s"}}</span></h5>
+								<p>{{.Summary}}</p>
+							</div>
+							<div class="comment count" >
+								<a href="/comment/{{.Key}}"21>评论</a>
+								<a href="javascript:;" class="like" data-type="note" data-key="{{.Key}}">点赞</a>
+							</div>
+						</div>
+						{{end}}
+					<div class="item-btn">
+						{{if gt .page 1}}
+						<button class="layui-btn layui-btn-normal"
+								onclick="window.location.href='/?page={{add .page -1}}'">上一页</button>
+								{{end}}
+							{{if lt .page .allpage}}
+                        <button class="layui-btn layui-btn-normal"
+                                onclick="window.location.href='/?page={{add .page 1}}'">下一页</button>
+									{{end}}
+					</div>
+			</div>
+		</div>
+		</div>
+{{template "common/footer.html"}}
+</body>
+</html>
