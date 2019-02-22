@@ -9,7 +9,7 @@ type ErrorController struct {
 	Base
 }
 
-//如果请求是ajax请求，返回jason{code:,msg:,ression:error}数据
+//如果请求是ajax请求，返回jason{code:,msg:,ression:error}数据hahh
 func (c *ErrorController) Error404() {
 	c.TplName = "error/404.html"
 	if c.IsAjax() {
