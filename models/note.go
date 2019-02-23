@@ -33,7 +33,9 @@ func QuerryByKey(key string) (note Note, err error) {
 	return note, err
 }
 func SaveNote(note *Note) error {
-
+	redisdb = RedisDb()
+	defer redisdb.Close()
+	redisdb.Do("del", note.Key)
 	return db.Save(note).Error
 }
 func QuerrByPageTitle(page, limit int, title string) (note []Note, err error) {
@@ -46,6 +48,9 @@ func QuerryByKeyAndUserId(key string, userid int) (note Note, err error) {
 	return note, db.Where("key = ? and user_id = ?", key, userid).Take(&note).Error
 }
 func DeleteByKeyAndId(key string, id int) error {
+	conn := RedisDb()
+	defer conn.Close()
+	conn.Do("del", key)
 	return db.Delete(&Note{}, "key = ? and user_id = ?", key, id).Error
 }
 

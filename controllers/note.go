@@ -4,10 +4,8 @@ import (
 	"MyBlog/models"
 	"MyBlog/syserror"
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
-	"github.com/gomodule/redigo/redis"
 	"github.com/jinzhu/gorm"
 	"github.com/satori/go.uuid"
 )
@@ -49,6 +47,7 @@ func (this *NoteControllers) PostNew() {
 			if e := models.SaveNote(&n); e != nil {
 				this.Abort500(syserror.New("提交失败", e))
 			}
+
 		} else {
 			this.Abort500(syserror.New("保存失败", err))
 		}
@@ -59,13 +58,6 @@ func (this *NoteControllers) PostNew() {
 		if e := models.SaveNote(&note); e != nil {
 			this.Abort500(syserror.New("提交失败", e))
 		}
-	}
-	conn, _ := redis.Dial("tcp", ":6379")
-	defer conn.Close()
-	_, e := conn.Do("get", key)
-	if e == nil {
-		marshal, _ := json.Marshal(note)
-		conn.Do("set", key, string(marshal))
 	}
 	this.SaveJson("提交成功", fmt.Sprintf("/details/%s", key))
 }
@@ -90,9 +82,6 @@ func (this *NoteControllers) Delete() {
 	if e != nil {
 		this.Abort500(e)
 	}
-	conn, _ := redis.Dial("tcp", ":6379")
-	defer conn.Close()
-	conn.Do("del", key)
 	this.Redirect("/", 302)
 }
 
