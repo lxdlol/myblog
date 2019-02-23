@@ -1,9 +1,7 @@
 package models
 
 import (
-	"encoding/json"
 	"fmt"
-	"github.com/gomodule/redigo/redis"
 	"reflect"
 )
 
@@ -20,16 +18,16 @@ type Note struct {
 }
 
 func QuerryByKey(key string) (note Note, err error) {
-	redisdb = RedisDb()
-	defer redisdb.Close()
-	reply, e := redis.String(redisdb.Do("get", key))
-	if e != nil {
-		err = db.Preload("User").Where("key = ?", key).Take(&note).Error
-		bytes, _ := json.Marshal(note)
-		redisdb.Do("set", key, string(bytes))
-		return note, err
-	}
-	err = json.Unmarshal([]byte(reply), &note)
+	//redisdb = RedisDb()
+	//defer redisdb.Close()
+	//reply, e := redis.String(redisdb.Do("get", key))
+	//if e != nil {
+	err = db.Preload("User").Where("key = ?", key).Take(&note).Error
+	//	bytes, _ := json.Marshal(note)
+	//	redisdb.Do("set", key, string(bytes))
+	//	return note, err
+	//}
+	//err = json.Unmarshal([]byte(reply), &note)
 	return note, err
 }
 func SaveNote(note *Note) error {
